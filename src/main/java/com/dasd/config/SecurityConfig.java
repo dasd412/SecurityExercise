@@ -31,7 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/loginForm")//인증이 필요한 url은 전부 /login으로 리다이렉트하도록 강제함.
                 .loginProcessingUrl("/login")// 로그인 주소가 호출이 되면 시큐리티가 인터셉트해서 대신 로그인 진행해줌. 이렇게 하면 컨트롤러에서 /login 매핑할 필요가 없음.
-                .defaultSuccessUrl("/");//로그인 하게 되면 "/" url 로 이동됨. 단, 진입하고자 했던 url이 있었으면 해당 url로 이동함.
-
+                .defaultSuccessUrl("/")//로그인 하게 되면 "/" url 로 이동됨. 단, 진입하고자 했던 url이 있었으면 해당 url로 이동함.
+                .and()
+                .oauth2Login()//oauth 로그인 역시 /loginForm 으로 진행하도록 함.
+                .loginPage("/loginForm");
     }
 }
