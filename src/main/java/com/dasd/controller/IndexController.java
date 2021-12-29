@@ -3,6 +3,8 @@ package com.dasd.controller;
 import com.dasd.model.User;
 import com.dasd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,4 +68,17 @@ public class IndexController {
         userRepository.save(user);// 회원가입 잘됨. 그러나 1234로 회원가입 할 경우에는 시큐리티 로그인이 안됨. 왜냐하면 패스워드가 암호화가 안되있기 때문.
         return "redirect:/loginForm"; //회원가입 되면 로그인폼으로 리다이렉트
     }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/info")
+    public @ResponseBody String info(){
+        return "개인정보";
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/data")
+    public @ResponseBody String data(){
+        return "데이터 정보";
+    }
+
 }
