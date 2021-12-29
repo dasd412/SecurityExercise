@@ -1,13 +1,20 @@
 package com.dasd.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터 체인에 등록이 된다.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean    //<- 해당 메서드의 리턴되는 오브젝트를 빈으로 등록해줌.
+    public BCryptPasswordEncoder encodePassword() {
+        return new BCryptPasswordEncoder();//<-비밀번호를 암호화해준다.
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -20,6 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()//그외의 요청은 다 허용.
                 .and()
                 .formLogin()
-                .loginPage("/login");//인증이 필요한 url은 전부 /login으로 리다이렉트하도록 강제함.
+                .loginPage("/loginForm")//인증이 필요한 url은 전부 /login으로 리다이렉트하도록 강제함.
+                .loginProcessingUrl("/login")// 로그인 주소가 호출이 되면 시큐리티가 인터셉트해서 대신 로그인 진행해줌. 이렇게 하면 컨트롤러에서 /login 매핑할 필요가 없음.
+                .defaultSuccessUrl("/");//로그인 하게 되면 "/" url 로 이동됨. 단, 진입하고자 했던 url이 있었으면 해당 url로 이동함.
+
     }
 }
