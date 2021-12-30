@@ -22,9 +22,17 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private final User user;//합성을 이용
+    private Map<String,Object>attributes;
 
+    //일반 로그인 시 사용되는 생성자
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    //Oauth 로그인 시 사용되는 생성자.
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
     }
 
     //해당 User 의 권한을 리턴하는 메서드
@@ -76,11 +84,14 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return true;
     }
 
+    //아래부터 Oauth 관련 메서드. OAuth2User 오버라이드 메서드임.
+
     @Override
     public Map<String, Object> getAttributes() {
         return null;
     }
 
+    //Oauth 의 기본키 getter 메서드. 잘 안씀.
     @Override
     public String getName() {
         return null;
