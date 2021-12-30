@@ -1,5 +1,7 @@
 package com.dasd.config;
 
+import com.dasd.config.oauth.PrincipalOauth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -12,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터 체인에 등록이 된다.
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)// secured 어노테이션 활성화, preAuthorize 어노테이션 활성화
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean    //<- 해당 메서드의 리턴되는 오브젝트를 빈으로 등록해줌.
     public BCryptPasswordEncoder encodePassword() {
@@ -34,6 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")//로그인 하게 되면 "/" url 로 이동됨. 단, 진입하고자 했던 url이 있었으면 해당 url로 이동함.
                 .and()
                 .oauth2Login()//oauth 로그인 역시 /loginForm 으로 진행하도록 함.
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                .userInfoEndpoint()//구글 로그인이 완료된 뒤 후처리 필요. 구글은 코드를 안주고 액세스 토큰 + 사용자 프로필 정보를 제공함.
+                .userService(principalOauth2UserService)
+                ;
     }
 }
