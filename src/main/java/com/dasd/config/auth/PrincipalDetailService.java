@@ -21,6 +21,8 @@ public class PrincipalDetailService implements UserDetailsService {
     //다르게 하려면 securityConfig 에서 설정 변경해야 함.
     //이 메소드의 리턴은 Authentication 타입 객체에 들어간다.
     //그리고 Authentication 타입 객체는 Security Session 에 들어간다.
+
+    //이 메서드 실행이 종료되고 나서 @AuthenticationPrincipal 어노테이션이 생성된다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User userEntity = userRepository.findByUsername(username);

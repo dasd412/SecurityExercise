@@ -21,6 +21,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     private UserRepository userRepository;
     
     //구글로부터 받은 userRequest 데이터에 대한 후처리를 담당하는 메서드
+    //이 메서드 실행이 종료되고 나서 @AuthenticationPrincipal 어노테이션이 생성된다.
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         System.out.println("getClientRegistration : "+userRequest.getClientRegistration());
