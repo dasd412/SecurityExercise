@@ -3,6 +3,7 @@ package com.dasd.config.oauth;
 import com.dasd.config.auth.PrincipalDetails;
 import com.dasd.config.oauth.provider.FaceBookOAuthUserInfo;
 import com.dasd.config.oauth.provider.GoogleUserInfo;
+import com.dasd.config.oauth.provider.NaverUserInfo;
 import com.dasd.config.oauth.provider.OAuth2UserInfo;
 import com.dasd.model.User;
 import com.dasd.repository.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -34,6 +37,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
             oAuth2UserInfo = new FaceBookOAuthUserInfo(oAuth2User.getAttributes());
+        } else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+            oAuth2UserInfo=new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
         }
 
         String username = oAuth2UserInfo.getProvider() + "_" + oAuth2UserInfo.getProviderId();//username 은 유니크해야하므로 이와 같이 만듬.
