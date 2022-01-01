@@ -88,7 +88,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return attributes;
     }
 
     //Oauth 의 기본키 getter 메서드. 잘 안씀.
